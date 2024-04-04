@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
+import { NextResponse } from "next/server";
 
 const mongooseUrl = process.env.DB_MONGO_DB;
 console.log("mongooseUrl", mongooseUrl);
 
 export const connect = async () => {
-  const connectionState = mongoose.connection.readyState;   //need to connect it once after that it will auto connected
+  const connectionState = mongoose.connection.readyState; //need to connect it once after that it will auto connected
   console.log("connectionState", connectionState);
   if (connectionState === 1) {
     console.log("ALREADY CONNECTED");
@@ -20,7 +21,10 @@ export const connect = async () => {
     console.log("MDBRESP : ", resp);
     console.log("CONNECTED");
   } catch (error) {
-    console.log("error", error);
+    console.log("errorDetection", error);
+    return new NextResponse("Error : ", error, {
+      status: 500,
+    });
   }
 };
 

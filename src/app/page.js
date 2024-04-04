@@ -99,96 +99,104 @@ const page = () => {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      {session?.status !== "authenticated" && (
-        <form
+    <>
+      {session?.status === "loading" ? (
+        <div>Loading</div>
+      ) : session?.status === "unauthenticated" ? (
+        <div
           style={{
+            minHeight: "100vh",
             display: "flex",
             justifyContent: "center",
-            flexDirection: "column",
-            gap: "20px",
             alignItems: "center",
           }}
-          onSubmit={handleSubmit}
         >
-          <h2>{currentPage ? "Login" : "Signup"} Page</h2>
-          {!currentPage && (
-            <input
-              name="name"
-              placeholder="User Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+          {session?.status !== "authenticated" && (
+            <form
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "column",
+                gap: "20px",
+                alignItems: "center",
+              }}
+              onSubmit={handleSubmit}
+            >
+              <h2>{currentPage ? "Login" : "Signup"} Page</h2>
+              {!currentPage && (
+                <input
+                  name="name"
+                  placeholder="User Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              )}
+              <input
+                name="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <input
+                name="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "20px",
+                  justifyContent: "center",
+                }}
+              >
+                <button type="button" onClick={() => handleTogglePage()}>
+                  {!currentPage ? "Login" : "Signup"}
+                </button>
+                <button type="submit">Submit</button>
+              </div>
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "10px" }}
+              >
+                <Image
+                  onClick={() => signIn("google")}
+                  src="/google.svg"
+                  alt="google"
+                  height="40"
+                  width="40"
+                  style={{ cursor: "pointer" }}
+                />
+                <Image
+                  onClick={() => signIn("github")}
+                  // onClick={() => signIn()}    //if we dont give it will ask by own by giving options
+                  src="/github.png"
+                  alt="github"
+                  height="40"
+                  width="40"
+                  style={{ cursor: "pointer" }}
+                />
+                <Image
+                  onClick={() => signIn("azure-ad")}
+                  src="/microsoft.svg"
+                  alt="microsoft"
+                  height="40"
+                  width="40"
+                  style={{ cursor: "pointer" }}
+                />
+                <Image
+                  src="/facebook.svg"
+                  alt="facebook"
+                  height="40"
+                  width="40"
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+            </form>
           )}
-          <input
-            name="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            name="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "20px",
-              justifyContent: "center",
-            }}
-          >
-            <button type="button" onClick={() => handleTogglePage()}>
-              {!currentPage ? "Login" : "Signup"}
-            </button>
-            <button type="submit">Submit</button>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <Image
-              onClick={() => signIn("google")}
-              src="/google.svg"
-              alt="google"
-              height="40"
-              width="40"
-              style={{ cursor: "pointer" }}
-            />
-            <Image
-              onClick={() => signIn("github")}
-              // onClick={() => signIn()}    //if we dont give it will ask by own by giving options
-              src="/github.png"
-              alt="github"
-              height="40"
-              width="40"
-              style={{ cursor: "pointer" }}
-            />
-            <Image
-              onClick={() => signIn("azure-ad")}
-              src="/microsoft.svg"
-              alt="microsoft"
-              height="40"
-              width="40"
-              style={{ cursor: "pointer" }}
-            />
-            <Image
-              src="/facebook.svg"
-              alt="facebook"
-              height="40"
-              width="40"
-              style={{ cursor: "pointer" }}
-            />
-          </div>
-        </form>
-      )}
-    </div>
+        </div>
+      ) : null}
+    </>
   );
 };
 

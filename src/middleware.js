@@ -22,7 +22,7 @@ export const config = {
   //   matcher: ["/api/books"],
 };
 export default async function middleware(req) {
-  // const token = req.headers.get("Authorization")?.split(" ")[1];
+  const Bearertoken = req.headers.get("Authorization")?.split(" ")[1];
   const token = req.headers.get("Authorization");
   console.log("token", token);
   try {
@@ -34,7 +34,10 @@ export default async function middleware(req) {
         console.log("token.split", token.split(" ").includes("token"));
         return NextResponse.next();
       } else {
-        const decoded = await jose.jwtVerify(token, jwtConfig.secret);
+        const decoded = await jose.jwtVerify(
+          token.split(" ").includes("Bearer") ? Bearertoken : token,
+          jwtConfig.secret
+        );
         console.log("decoded", decoded);
         if (decoded?.payload?.email) {
           return NextResponse.next();

@@ -9,9 +9,16 @@ const page = () => {
   console.log("session", session);
   const [books, setBooks] = useState([]);
   const userToken = JSON.parse(localStorage.getItem("token"));
+
   useEffect(() => {
     getAllTheBooks();
   }, []);
+
+  useEffect(() => {
+    if (session.status === "unauthenticated") {
+      redirect("/");
+    }
+  }, [session]);
 
   const getAllTheBooks = async () => {
     try {
@@ -39,31 +46,39 @@ const page = () => {
     signOut({ callbackUrl: "http://localhost:3000" });
   };
   return (
-    <div>
-      <h2>Dashboard</h2>
-      <div>
-        Signed in as {session?.data?.user?.name} <br />
-        <button onClick={() => handleSignout()}>Sign out</button>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>S.No</th>
-            <th>Book Name</th>
-            <th>Book Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          {books?.map((item, index) => (
-            <tr key={item._id}>
-              <td>{index + 1}</td>
-              <td>{item.bookname}</td>
-              <td>{item.description}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <>
+      {session?.status === "loading" ? (
+        <div>Loading</div>
+      ) : session?.status === "unauthenticated" ? (
+        <div>Unauthenticated</div>
+      ) : (
+        <div>
+          <h2>Dashboard</h2>
+          <div>
+            Signed in as {session?.data?.user?.name} <br />
+            <button onClick={() => handleSignout()}>Sign out</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>Book Name</th>
+                <th>Book Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              {books?.map((item, index) => (
+                <tr key={item._id}>
+                  <td>{index + 1}</td>
+                  <td>{item.bookname}</td>
+                  <td>{item.description}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </>
   );
 };
 

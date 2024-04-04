@@ -21,7 +21,7 @@ export const authOptions = {
         },
       },
       async authorize(credentials, req) {
-        await connect();
+        // await connect();
         const res = await User.findOne({ email: credentials.email });
         console.log("res", res);
         if (res?._id) {
